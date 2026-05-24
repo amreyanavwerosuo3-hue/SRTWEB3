@@ -34,9 +34,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const MASTER_ADMIN_EMAIL = "admin@mummyj.com";
     const MASTER_ADMIN_PASSWORD = "mummyj2026";
 
+    // ==========================================
+    // 2. RETIREVE ADMIN SESSION ON RELOAD
+    // ==========================================
+    if (localStorage.getItem("currentAdminMode") === "true") {
+        if(adminDashboard) adminDashboard.classList.remove("hidden-pane");
+        if(loginBtn) {
+            loginBtn.textContent = "Admin Mode";
+            loginBtn.style.backgroundColor = "#ff5500";
+        }
+        renderAdminOrders();
+    }
 
     // ==========================================
-    // 2. MOBILE HAMBURGER MENU
+    // 3. MOBILE HAMBURGER MENU
     // ==========================================
     if (mobileMenuBtn && navLinksList) {
         mobileMenuBtn.addEventListener("click", () => {
@@ -52,9 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
     // ==========================================
-    // 3. PRICING CALCULATOR LOGIC
+    // 4. PRICING CALCULATOR LOGIC
     // ==========================================
     const basePrices = {
         documents: 1500,
@@ -91,73 +101,80 @@ document.addEventListener("DOMContentLoaded", () => {
         weightSelect.addEventListener("change", updateEstimatedPrice);
     }
 
-
     // ==========================================
-    // 4. BOOKING SUBMISSION & GENERATION
+    // 5. BOOKING SUBMISSION
     // ==========================================
     if (bookingForm) {
         bookingForm.addEventListener("submit", (e) => {
             e.preventDefault(); 
 
             const senderName = document.getElementById("senderName").value;
+            const senderPhone = document.getElementById("senderPhone").value;
             const pickupAddress = document.getElementById("pickupAddress").value;
             const receiverName = document.getElementById("receiverName").value;
+            const receiverPhone = document.getElementById("receiverPhone").value;
             const deliveryAddress = document.getElementById("deliveryAddress").value;
             const finalCost = priceDisplay.textContent;
 
-            // Generate tracking code
             const randomDigits = Math.floor(10000 + Math.random() * 90000);
             const uniqueTrackingID = `MJD-${randomDigits}`;
 
             const orderData = {
                 trackingID: uniqueTrackingID,
                 sender: senderName,
+                senderPhone: senderPhone,
                 pickup: pickupAddress,
                 receiver: receiverName,
+                receiverPhone: receiverPhone,
                 delivery: deliveryAddress,
                 cost: finalCost,
                 status: "Rider Assigned"
             };
 
-            // Save order to LocalStorage
             localStorage.setItem(uniqueTrackingID, JSON.stringify(orderData));
 
-            alert(`🎉 Booking Confirmed!\n\nYour Mummy J Rider is on the way.\nYour Tracking ID is: ${uniqueTrackingID}\n\nPlease copy this code to track your parcel.`);
+            alert(`🎉 Booking Confirmed!\n\nYour Tracking ID is: ${uniqueTrackingID}\n\nRider assigned shortly.`);
             
             bookingForm.reset();
             priceDisplay.textContent = "₦0.00";
+            
+            if(localStorage.getItem("currentAdminMode") === "true") {
+                renderAdminOrders();
+            }
         });
     }
 
-
     // ==========================================
-    // 5. CLIENT TRACKING WIDGET
+    // 6. CLIENT TRACKING WITH DIRECT ADMIN CHAT
     // ==========================================
     if (trackingForm) {
         trackingForm.addEventListener("submit", (e) => {
             e.preventDefault();
             
             const searchID = trackingInput.value.trim().toUpperCase();
-
-            if (!searchID) {
-                alert("Please enter a valid Tracking ID.");
-                return;
-            }
+            if (!searchID) return;
 
             const savedOrder = localStorage.getItem(searchID);
 
             if (savedOrder) {
                 const order = JSON.parse(savedOrder);
-                alert(`📦 Order Found!\n\nTracking ID: ${order.trackingID}\nStatus: [ ${order.status} ]\nFrom: ${order.pickup}\nTo: ${order.delivery}\nTotal Cost: ${order.cost}`);
+                
+                // Professional WhatsApp text routing line
+                const adminWhatsAppNumber = "2348031234567"; // Replace with real Mummy J business phone line
+                const message = encodeURIComponent(`Hello Mummy J Admin, I need support with my package order. Tracking ID: ${order.trackingID}. Status is currently [${order.status}].`);
+                const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${message}`;
+
+                alert(`📦 Order Found!\n\nTracking ID: ${order.trackingID}\nStatus: [ ${order.status} ]\nFrom: ${order.pickup}\nTo: ${order.delivery}\nTotal Cost: ${order.cost}\n\nNeed to speak with us? Click OK to chat with Admin instantly on WhatsApp.`);
+                
+                window.open(whatsappUrl, '_blank');
             } else {
                 alert("❌ Tracking ID not found. Please check the code and try again.");
             }
         });
     }
 
-
     // ==========================================
-    // 6. AUTHENTICATION (LOGIN & SIGNUP)
+    // 7. AUTHENTICATION MODULE
     // ==========================================
     if (loginBtn && authModal) {
         loginBtn.addEventListener("click", (e) => {
@@ -180,96 +197,80 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Signup form submission
     if (signupForm) {
         signupForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            
             const name = document.getElementById("signupName").value.trim();
             const email = document.getElementById("signupEmail").value.trim().toLowerCase();
             const password = document.getElementById("signupPassword").value;
 
             if (password.length < 6) {
-                alert("Security Warning: Password must be at least 6 characters long.");
+                alert("Password must be at least 6 characters.");
                 return;
             }
 
             if (localStorage.getItem(email)) {
-                alert("An account with this email already exists! Please log in.");
+                alert("Account already exists.");
                 return;
             }
 
-            const userData = { name, email, password };
-            localStorage.setItem(email, JSON.stringify(userData));
-
-            alert("🎉 Registration Successful! You can now log in.");
+            localStorage.setItem(email, JSON.stringify({ name, email, password }));
+            alert("🎉 Registration Successful!");
             signupForm.reset();
-            
             signupFormPane.classList.add("hidden-pane");
             loginFormPane.classList.remove("hidden-pane");
         });
     }
 
-    // Unified Login handler (Processes both Users and Master Admin)
     if (loginForm) {
         loginForm.addEventListener("submit", (e) => {
             e.preventDefault();
-
             const email = document.getElementById("loginEmail").value.trim().toLowerCase();
             const password = document.getElementById("loginPassword").value;
 
-            // Check Admin Routing First
             if (email === MASTER_ADMIN_EMAIL && password === MASTER_ADMIN_PASSWORD) {
-                alert("🛡️ Access Granted: Welcome to the Mummy J Control Center.");
-                
+                alert("🛡️ Access Granted: Welcome Admin.");
                 authModal.classList.remove("active");
                 loginForm.reset();
-                
                 loginBtn.textContent = "Admin Mode";
                 loginBtn.style.backgroundColor = "#ff5500";
-                
+                localStorage.setItem("currentAdminMode", "true");
                 adminDashboard.classList.remove("hidden-pane");
                 renderAdminOrders();
                 adminDashboard.scrollIntoView({ behavior: 'smooth' });
                 return; 
             }
 
-            // Otherwise, process normal User Login
             const storedAccount = localStorage.getItem(email);
-
             if (!storedAccount) {
-                alert("No account found with this email. Please sign up first.");
+                alert("No account found.");
                 return;
             }
 
             const user = JSON.parse(storedAccount);
-
             if (user.password === password) {
-                alert(`👋 Welcome back, ${user.name}! Login successful.`);
+                alert(`👋 Welcome, ${user.name}!`);
                 loginBtn.textContent = `Hi, ${user.name.split(' ')[0]}`;
                 loginBtn.style.backgroundColor = "#28a745"; 
                 loginBtn.style.color = "white";
                 authModal.classList.remove("active");
                 loginForm.reset();
             } else {
-                alert("❌ Incorrect password. Please try again.");
+                alert("❌ Incorrect password.");
             }
         });
     }
 
-
     // ==========================================
-    // 7. ADMIN DASHBOARD OPERATIONS
+    // 8. ADMIN DASHBOARD WITH COMMUNICATIONS
     // ==========================================
     function renderAdminOrders() {
         if (!adminOrderTableBody) return;
-        
         adminOrderTableBody.innerHTML = ""; 
         let ordersFound = false;
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            
             if (key && key.startsWith("MJD-")) {
                 ordersFound = true;
                 const order = JSON.parse(localStorage.getItem(key));
@@ -277,9 +278,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td><strong>${order.trackingID}</strong></td>
-                    <td>${order.sender}<br><small style="color:#aaa">${order.pickup}</small></td>
-                    <td>${order.receiver}<br><small style="color:#aaa">${order.delivery}</small></td>
-                    <td>${order.cost}</td>
+                    <td>
+                        <strong>${order.sender}</strong><br>
+                        <a href="tel:${order.senderPhone}" class="admin-call-link">📞 ${order.senderPhone}</a><br>
+                        <small style="color:#aaa">${order.pickup}</small>
+                    </td>
+                    <td>
+                        <strong>${order.receiver}</strong><br>
+                        <a href="tel:${order.receiverPhone}" class="admin-call-link">📞 ${order.receiverPhone}</a><br>
+                        <small style="color:#aaa">${order.delivery}</small>
+                    </td>
+                    <td><span style="color:#ff9900; font-weight:bold;">${order.cost}</span></td>
                     <td><span class="status-badge" id="badge-${order.trackingID}">${order.status}</span></td>
                     <td>
                         <select class="status-updater" data-id="${order.trackingID}">
@@ -297,16 +306,13 @@ document.addEventListener("DOMContentLoaded", () => {
             adminOrderTableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">No active dispatch requests available.</td></tr>`;
         }
 
-        // Attach layout status updater events
         document.querySelectorAll(".status-updater").forEach(selectElement => {
             selectElement.addEventListener("change", (event) => {
                 const targetTrackingID = event.target.getAttribute("data-id");
                 const newStatusValue = event.target.value;
-
                 const updatedOrder = JSON.parse(localStorage.getItem(targetTrackingID));
                 updatedOrder.status = newStatusValue;
                 localStorage.setItem(targetTrackingID, JSON.stringify(updatedOrder));
-
                 document.getElementById(`badge-${targetTrackingID}`).textContent = newStatusValue;
             });
         });
@@ -314,13 +320,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (logoutAdminBtn) {
         logoutAdminBtn.addEventListener("click", () => {
+            localStorage.removeItem("currentAdminMode");
             adminDashboard.classList.add("hidden-pane");
             loginBtn.textContent = "Login / Signup";
             loginBtn.style.backgroundColor = "";
             loginBtn.style.color = "";
-            alert("Logged out securely from Admin Control Center.");
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
-
 });

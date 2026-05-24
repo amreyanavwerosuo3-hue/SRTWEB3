@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mummy J Dispatch Service - Fast & Reliable Bike Delivery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
         /* BASIC CSS RESET & RESETTING DEFAULTS FOR LAYOUT (Styling Phase later) */
@@ -42,6 +43,25 @@
             color: #555;
             font-weight: 500;
         }
+
+        /* Smoothly fade nav links on hover */
+.nav-links a {
+    transition: color 0.2s ease;
+}
+.nav-links a:hover {
+    color: #ff5500 !important;
+}
+
+/* Make form inputs grow an accent border when clicked */
+input[type="text"], input[type="email"], input[type="password"], select {
+    border: 2px solid #eee;
+    transition: all 0.2s ease;
+}
+input:focus, select:focus {
+    border-color: #ff5500 !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.1);
+}
 
         /* 2. Hero Section */
         #hero {
@@ -178,6 +198,21 @@
                 </div>
             </div>
         </section>
+
+        <section class="stats-banner">
+    <div class="stat-item">
+        <h3>50+</h3>
+        <p>Active Riders</p>
+    </div>
+    <div class="stat-item">
+        <h3>15k+</h3>
+        <p>Deliveries Completed</p>
+    </div>
+    <div class="stat-item">
+        <h3>25 Mins</h3>
+        <p>Average Delivery Time</p>
+    </div>
+</section>
 
         <!-- 5. INTERACTIVE BOOKING FORM -->
         <section id="booking">
