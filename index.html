@@ -52,6 +52,19 @@
     color: #ff5500 !important;
 }
 
+/* Force typed text and email inputs inside the auth modal to be visible */
+#authModal input[type="email"],
+#authModal input[type="password"],
+#authModal input[type="text"] {
+    color: #111111 !important;        /* Dark black text color */
+    background-color: #ffffff;      /* Solid white background */
+    font-weight: 500;
+}
+
+/* Optional: Make the placeholder text a readable gray color */
+#authModal input::placeholder {
+    color: #777777 !important;
+}
 /* Make form inputs grow an accent border when clicked */
 input[type="text"], input[type="email"], input[type="password"], select {
     border: 2px solid #eee;
