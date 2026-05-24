@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mummy J Dispatch Service - Fast & Reliable Bike Delivery</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* BASIC CSS RESET & RESETTING DEFAULTS FOR LAYOUT (Styling Phase later) */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* 1. Header & Navigation */
+        header {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+        }
+
+        /* 2. Hero Section */
+        #hero {
+            background-image: url('/medias/dispatch1.png');
+            background-size: cover;
+            background-position: center;
+            height: 80vh; /* Takes up 80% of the viewport height */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative; /* Essential for overlay */
+        }
+        /* Create a dark overlay to make text readable */
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            z-index: 1; /* Places the overlay behind the content */
+        }
+        #hero * { /* Ensure all content *inside* hero is above overlay */
+            z-index: 2;
+        }
+        #hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        #hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .cta-button {
+            background-color: #ffc107; /* Bright amber/gold */
+            color: #333;
+            padding: 12px 24px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* 3. Track Order Widget */
+        #tracking {
+            background-color: white;
+            padding: 2rem;
+            margin-top: -50px; /* Overlap effect, standard for tracking boxes */
+            z-index: 10;
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #tracking input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #tracking button {
+            width: 25%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Foundation Sections for Booking/Features (Styling needed later) */
+        main section {
+            padding: 3rem 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. HEADER & NAVIGATION -->
+    <header>
+        <nav>
+            <a href="#" class="logo">Mummy J Dispatch</a>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#features">Services</a></li>
+                <li><a href="#tracking">Track Order</a></li>
+                <li><a href="#booking">Book Now</a></li>
+            </ul>
+            <a href="#" class="cta-button login-btn">Login / Signup</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 2. HERO SECTION (With Background Photo) -->
+        <section id="hero">
+            <h1>Fast, Reliable Bike Delivery.</h1>
+            <p>Mummy J Dispatch Service gets your parcels moved swiftly and safely.</p>
+            <a href="#booking" class="cta-button">Book a Delivery Now</a>
+        </section>
+
+        <!-- 3. TRACK ORDER WIDGET -->
+        <section id="tracking">
+            <h2>Track Your Order</h2>
+            <form>
+                <input type="text" placeholder="Enter Tracking ID (e.g., MJD-12345)">
+                <button type="submit">Track</button>
+            </form>
+        </section>
+
+        <!-- 4. CORE FEATURES (Responsive Grid) -->
+        <section id="features">
+            <h2>Why Choose Mummy J?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Swift Delivery</h3>
+                    <p>Our dedicated bike riders bypass traffic to ensure your packages arrive at their destination in record time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Affordable Rates</h3>
+                    <p>Transparent pricing with no hidden charges. Calculate your delivery cost upfront before booking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Safe & Secure</h3>
+                    <p>From fragile documents to food and electronics, we handle your parcels with maximum care and security.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. INTERACTIVE BOOKING FORM -->
+        <section id="booking">
+            <div class="booking-container">
+                <h2>Book Your Dispatch Rider</h2>
+                <p>Fill out the details below for an instant delivery arrangement.</p>
+                
+                <form id="dispatchBookingForm">
+                    <!-- Step 1: Sender Information -->
+                    <div class="form-group-section">
+                        <h3>1. Sender Details</h3>
+                        <div class="form-row">
+                            <div class="input-box">
+                                <label for="senderName">Your Name</label>
+                                <input type="text" id="senderName" required placeholder="Enter full name">
+                            </div>
+                            <div class="input-box">
+                                <label for="senderPhone">Phone Number</label>
+                                <input type="tel" id="senderPhone" required placeholder="e.g., +234...">
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <label for="pickupAddress">Pickup Address</label>
+                            <input type="text" id="pickupAddress" required placeholder="Street address, city">
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Receiver Information -->
+                    <div class="form-group-section">
+                        <h3>2. Recipient Details</h3>
+                        <div class="form-row">
+                            <div class="input-box">
+                                <label for="receiverName">Recipient's Name</label>
+                                <input type="text" id="receiverName" required placeholder="Enter recipient name">
+                            </div>
+                            <div class="input-box">
+                                <label for="receiverPhone">Phone Number</label>
+                                <input type="tel" id="receiverPhone" required placeholder="e.g., +234...">
+                            </div>
+                        </div>
+                        <div class="input-box">
+                            <label for="deliveryAddress">Delivery Address</label>
+                            <input type="text" id="deliveryAddress" required placeholder="Street address, city">
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Package Details -->
+                    <div class="form-group-section">
+                        <h3>3. Package Information</h3>
+                        <div class="form-row">
+                            <div class="input-box">
+                                <label for="itemType">Item Type</label>
+                                <select id="itemType" required>
+                                    <option value="" disabled selected>Select package type</option>
+                                    <option value="documents">Documents / Papers</option>
+                                    <option value="food">Food / Groceries</option>
+                                    <option value="clothes">Clothing / Apparel</option>
+                                    <option value="electronics">Electronics / Gadgets</option>
+                                    <option value="other">Other Parcels</option>
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <label for="packageWeight">Estimated Weight</label>
+                                <select id="packageWeight">
+                                    <option value="light">Light (0 - 2kg)</option>
+                                    <option value="medium">Medium (2kg - 5kg)</option>
+                                    <option value="heavy">Heavy (5kg+)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Display Box -->
+                    <div class="price-estimation-box">
+                        <span>Estimated Cost:</span>
+                        <span id="calculatedPrice">₦0.00</span>
+                    </div>
+
+                    <button type="submit" class="submit-booking-btn">Confirm Delivery Request</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="adminDashboard" class="admin-panel hidden-pane">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <h2>Mummy J Admin Control Center</h2>
+                    <button id="logoutAdminBtn" class="logout-btn">Log Out Admin</button>
+                </div>
+                <p>Real-time delivery requests and rider dispatch management.</p>
+                
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Tracking ID</th>
+                                <th>Sender Details</th>
+                                <th>Recipient Details</th>
+                                <th>Cost</th>
+                                <th>Current Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrderTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- AUTHENTICATION MODAL POPUP -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal-btn">&times;</span>
+            
+            <!-- Login Form Pane -->
+            <div id="loginFormPane">
+                <h2>Welcome Back</h2>
+                <p>Log in to manage your Mummy J dispatches</p>
+                <form id="userLoginForm">
+                    <div class="input-box">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" required placeholder="name@example.com">
+                    </div>
+                    <div class="input-box">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="submit-booking-btn">Log In</button>
+                </form>
+                <p class="auth-switch-text">Don't have an account? <span id="switchToSignup">Sign Up</span></p>
+            </div>
+
+            <!-- Signup Form Pane (Hidden by Default) -->
+            <div id="signupFormPane" class="hidden-pane">
+                <h2>Create Account</h2>
+                <p>Join Mummy J Dispatch Service today</p>
+                <form id="userSignupForm">
+                    <div class="input-box">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" required placeholder="John Doe">
+                    </div>
+                    <div class="input-box">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" required placeholder="name@example.com">
+                    </div>
+                    <div class="input-box">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" required placeholder="Min. 6 characters">
+                    </div>
+                    <button type="submit" class="submit-booking-btn">Register</button>
+                </form>
+                <p class="auth-switch-text">Already have an account? <span id="switchToLogin">Log In</span></p>
+            </div>
+        </div>
+
+
+    </main>
+
+    <!-- 6. FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Mummy J Dispatch Service. All rights reserved.</p>
+            <p>Swift. Secure. Reliable.</p>
+        </div>
+    </footer>
+
+<script src="app.js"></script>
+</body>
+</html>
